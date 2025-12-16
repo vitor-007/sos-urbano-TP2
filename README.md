@@ -1,69 +1,179 @@
-# React + TypeScript + Vite
+# SOS Urbano — Plataforma de Denúncias Comunitárias
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Um sistema moderno desenvolvido em React + TypeScript integrado ao Firebase para autenticação, banco de dados e hospedagem.
+A aplicação permite que moradores registrem denúncias de problemas urbanos como vazamentos, buracos em vias, iluminação pública, descarte irregular de lixo e outros incidentes da cidade.
 
-Currently, two official plugins are available:
+📌 Índice
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Descrição do Projeto
 
-## Expanding the ESLint configuration
+Tecnologias Utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Funcionalidades
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Arquitetura da Aplicação
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Instalação e Execução
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Configuração do Firebase
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Regras de Segurança (Firestore Rules)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Estrutura de Pastas
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Próximos Passos / Melhorias Futuras
+
+Autor
+
+📝 Descrição do Projeto
+
+O SOS Urbano é uma plataforma simples, rápida e responsiva para registrar denúncias sobre problemas na cidade.
+O objetivo é proporcionar uma comunicação eficiente entre moradores e órgãos responsáveis, tornando mais fácil relatar e acompanhar solicitações.
+
+O sistema possui autenticação, cadastro de denúncias, visualização em lista, modal de detalhes e gerenciamento via Firebase.
+
+🛠 Tecnologias Utilizadas
+Frontend
+
+React
+
+TypeScript
+
+Vite
+
+React Router DOM
+
+CSS Modules / Tailwind (depende do seu setup)
+
+Backend-as-a-Service
+
+Firebase Authentication
+
+Firebase Firestore
+
+Firebase Hosting
+
+⚙ Funcionalidades
+👤 Autenticação
+
+Login com email e senha
+
+Registro de novos usuários
+
+Controle de rotas privadas
+
+🚨 Denúncias
+
+Cadastro de nova denúncia
+
+Seleção de categoria (ex: Buraco, Vazamento, Iluminação, Lixo, etc.)
+
+Upload de imagem (se você usar Storage futuramente)
+
+Salvar dados no Firestore com timestamp
+
+📄 Lista de Ocorrências
+
+Exibição de todas as denúncias registradas
+
+Cards organizados mostrando título, descrição, status e data
+
+🔍 Visualização Detalhada
+
+Modal com todas as informações da denúncia
+
+Possibilidade de expansão futura: adicionar comentários, fotos adicionais, atualização de status etc.
+
+🧱 Arquitetura da Aplicação
+
+React com componentes isolados
+
+Firebase centralizado em /src/firebase/config.ts
+
+Páginas separadas:
+
+/login
+
+/register
+
+/dashboard
+
+/denuncias
+
+Hooks e services para abstrair Firestore e Auth
+
+Responsividade para desktop e mobile
+
+▶ Instalação e Execução
+1. Clone o repositório
+git clone https://github.com/SEU_USUARIO/sos-urbano.git
+cd sos-urbano
+
+2. Instale as dependências
+npm install
+
+3. Execute o projeto
+npm run dev
+
+🔥 Configuração do Firebase
+
+Crie um arquivo em:
+
+/src/firebase/config.ts
+
+
+Com:
+
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "SUA_KEY",
+  authDomain: "SUA_APP.firebaseapp.com",
+  projectId: "SUA_PROJECT_ID",
+  storageBucket: "SUA_BUCKET.appspot.com",
+  messagingSenderId: "...",
+  appId: "..."
+};
+
+const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+
+🔐 Regras de Segurança (Firestore Rules)
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Permite que usuários autenticados leiam e escrevam somente seus próprios registros
+    match /denuncias/{docId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Bloqueia todo o restante
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+📁 Estrutura de Pastas (simplificada)
+src
+ ├── components
+ │    ├── FormDenuncia
+ │    ├── ModalDetalhes
+ │    └── CardDenuncia
+ ├── pages
+ │    ├── login
+ │    ├── register
+ │    ├── dashboard
+ │    └── denuncias
+ ├── firebase
+ │    └── config.ts
+ ├── hooks
+ ├── services
+ ├── styles
+ └── App.tsx
