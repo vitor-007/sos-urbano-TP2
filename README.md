@@ -106,7 +106,7 @@ Responsividade para desktop e mobile
 
 ▶ Instalação e Execução
 1. Clone o repositório
-git clone https://github.com/SEU_USUARIO/sos-urbano.git
+git clone https://github.com/vitor-007/sos-urbano-TP2.git
 cd sos-urbano
 
 2. Instale as dependências
